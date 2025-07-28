@@ -1,7 +1,7 @@
 {
-  "name": "Note Revisitor",
-  "short_name": "Note Revisitor",
-  "description": "Review your notes to see which might fit the current vibe. A Nostr-powered app for rediscovering your thoughts.",
+  "name": "NostRecall",
+  "short_name": "NostRecall",
+  "description": "Review your notes to pick up on past conversations, boost your best content and remember important info.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

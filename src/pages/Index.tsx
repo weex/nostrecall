@@ -6,8 +6,8 @@ import { Brain, Clock, TrendingUp, BookOpen } from 'lucide-react';
 
 const Index = () => {
   useSeoMeta({
-    title: 'Note Revisitor - Review Your Notes',
-    description: 'Review your notes to see which might fit the current vibe. A Nostr-powered app for rediscovering your thoughts.',
+    title: 'NostRecall - Review Your Notes',
+    description: 'Review your notes to pick up on past conversations, boost your best content and remember important info.',
   });
 
   return (
@@ -17,16 +17,16 @@ const Index = () => {
           {/* Hero Section */}
           <div className="space-y-4">
             <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100">
-              Note Revisitor
+              NostRecall
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Review your notes to see which might fit the current vibe.
+              Review your notes to pick up on past conversations, boost your best content and remember important info. 
             </p>
             <div className="pt-4">
               <Button asChild size="lg" className="text-lg px-8 py-3">
                 <Link to="/notes">
                   <Brain className="h-5 w-5 mr-2" />
-                  Start Revisiting
+                  Start Recalling
                 </Link>
               </Button>
             </div>
@@ -39,7 +39,7 @@ const Index = () => {
                 <Clock className="h-12 w-12 text-blue-500 mx-auto mb-4" />
                 <CardTitle>Smart Scheduling</CardTitle>
                 <CardDescription>
-                  Revisit notes at optimal intervals to rediscover insights that match your current mindset
+                  Revisit notes at optimal intervals to rediscover and share insights.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -49,7 +49,7 @@ const Index = () => {
                 <TrendingUp className="h-12 w-12 text-green-500 mx-auto mb-4" />
                 <CardTitle>Track Progress</CardTitle>
                 <CardDescription>
-                  Monitor your revisiting journey and see which notes resonate with you over time
+                  Monitor your revisiting journey and see which notes resonate over time
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -104,7 +104,7 @@ const Index = () => {
                 </div>
                 <h3 className="font-semibold">Complete the Cycle</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  After all revisits, you'll have fully explored which notes resonate with you
+                  After all revisits, you'll have fully explored which notes resonate
                 </p>
               </div>
             </div>

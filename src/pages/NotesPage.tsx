@@ -20,9 +20,9 @@ export default function NotesPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto text-center space-y-6">
-          <h1 className="text-3xl font-bold">Note Revisitor</h1>
+          <h1 className="text-3xl font-bold">NostRecall</h1>
           <p className="text-muted-foreground">
-            Review your notes to see which might fit the current vibe.
+            Review your notes to pick up on past conversations, boost your best content and remember important info. 
           </p>
           <LoginArea className="max-w-60 mx-auto" />
         </div>
@@ -40,7 +40,7 @@ export default function NotesPage() {
           <div>
             <h1 className="text-3xl font-bold">My Notes</h1>
             <p className="text-muted-foreground">
-              Revisit your thoughts and find your vibe
+              Revisit your notes and conversations
             </p>
           </div>
           {notes && notes.length > 0 && (
