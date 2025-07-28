@@ -122,7 +122,18 @@ const Index = () => {
               >
                 MKStack
               </a>
-            </p>
+            </p> 
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Source on{' '}
+              <a
+                href="https://github.com/weex/nostrecall"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                Github 
+              </a>
+            </p> 
           </div>
         </div>
       </div>
