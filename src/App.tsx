@@ -40,6 +40,10 @@ const presetRelays = [
   { url: 'wss://relay.nostr.band', name: 'Nostr.Band' },
   { url: 'wss://relay.damus.io', name: 'Damus' },
   { url: 'wss://relay.primal.net', name: 'Primal' },
+  { url: 'wss://nos.lol', name: 'nos.lol' },
+  { url: 'wss://relay.snort.social', name: 'Snort' },
+  { url: 'wss://nostr.wine', name: 'Nostr Wine' },
+  { url: 'wss://relay.nostr.info', name: 'Nostr.info' },
 ];
 
 export function App() {

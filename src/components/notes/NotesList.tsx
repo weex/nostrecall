@@ -14,13 +14,16 @@ import { useToast } from '@/hooks/useToast';
 import { formatDistanceToNow } from '@/lib/dateUtils';
 import { Clock, CheckCircle, RotateCcw, Repeat2, ChevronDown, Quote, Copy } from 'lucide-react';
 import { nip19 } from 'nostr-tools';
+import type { TimeRange } from '@/hooks/useMyNotes';
 
 interface NotesListProps {
   notes: NostrEvent[];
   isLoading: boolean;
+  timeRange?: TimeRange;
+  isUsingCustomRelay?: boolean;
 }
 
-export function NotesList({ notes, isLoading }: NotesListProps) {
+export function NotesList({ notes, isLoading, timeRange = 'month', isUsingCustomRelay = false }: NotesListProps) {
   const [quotedBoostNote, setQuotedBoostNote] = useState<NostrEvent | null>(null);
   const { getReviewProgress, markReviewed, resetProgress } = useSpacedRepetition();
   const { mutate: createEvent } = useNostrPublish();
@@ -75,8 +78,15 @@ export function NotesList({ notes, isLoading }: NotesListProps) {
   };
 
   if (isLoading) {
+    const loadingMessage = isUsingCustomRelay
+      ? 'Searching selected relay for notes...'
+      : 'Loading notes...';
+
     return (
       <div className="space-y-4">
+        <div className="text-center py-4">
+          <div className="text-sm text-muted-foreground">{loadingMessage}</div>
+        </div>
         {Array.from({ length: 3 }).map((_, i) => (
           <Card key={i}>
             <CardHeader>
@@ -99,12 +109,22 @@ export function NotesList({ notes, isLoading }: NotesListProps) {
   }
 
   if (notes.length === 0) {
+    let emptyMessage = timeRange === 'all-time'
+      ? "No notes found. Write some notes in your favorite Nostr client to start revisiting!"
+      : "No notes found from the last month. Write some notes in your favorite Nostr client to start revisiting!";
+
+    if (timeRange === 'all-time' && !isUsingCustomRelay) {
+      emptyMessage = "No notes found on your default relay. Try selecting a different relay above to search for older notes that might be stored elsewhere.";
+    } else if (timeRange === 'all-time' && isUsingCustomRelay) {
+      emptyMessage = "No notes found on the selected relay. Try choosing a different relay to search for your notes.";
+    }
+
     return (
       <Card className="border-dashed">
         <CardContent className="py-12 px-8 text-center">
           <div className="max-w-sm mx-auto space-y-4">
             <p className="text-muted-foreground">
-              No notes found from the last month. Write some notes in your favorite Nostr client to start revisiting!
+              {emptyMessage}
             </p>
           </div>
         </CardContent>
