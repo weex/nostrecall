@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Star, X, Send } from 'lucide-react';
+import { Star, X, Send, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -32,6 +32,7 @@ export function FeedbackPopup({
   const [improvements, setImprovements] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showMinimized, setShowMinimized] = useState(false);
 
   const { user } = useCurrentUser();
   const { mutateAsync: publishEvent } = useNostrPublish();
@@ -44,25 +45,39 @@ export function FeedbackPopup({
   // Check if user has already submitted feedback this session
   useEffect(() => {
     const submitted = sessionStorage.getItem('feedback-submitted');
+    const dismissed = sessionStorage.getItem('feedback-dismissed');
     if (submitted) {
       setHasSubmitted(true);
+      setShowMinimized(true);
+    } else if (dismissed) {
+      setShowMinimized(true);
     }
   }, []);
 
-  // Auto-show popup after 30 seconds if user is logged in and hasn't submitted feedback
+  // Auto-show popup after 30 seconds if user is logged in and hasn't interacted with feedback
   useEffect(() => {
-    if (!user || hasSubmitted || isVisible) return;
+    if (!user || hasSubmitted || isVisible || showMinimized) return;
 
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 30000); // 30 seconds
 
     return () => clearTimeout(timer);
-  }, [user, hasSubmitted, isVisible]);
+  }, [user, hasSubmitted, isVisible, showMinimized]);
 
   const handleClose = () => {
     setIsVisible(false);
+    setShowMinimized(true);
     onClose?.();
+  };
+
+  const handleReopen = () => {
+    setIsVisible(true);
+    setShowMinimized(false);
+    // Reset form state for new feedback
+    setRating(0);
+    setHoveredRating(0);
+    setImprovements('');
   };
 
   const handleSubmit = async () => {
@@ -147,7 +162,8 @@ URL: ${feedbackMessage.url}`;
         description: "Thank you for your feedback. It has been sent securely.",
       });
 
-      handleClose();
+      setIsVisible(false);
+      setShowMinimized(true);
     } catch (error) {
       console.error('Failed to send feedback:', error);
       toast({
@@ -161,13 +177,28 @@ URL: ${feedbackMessage.url}`;
   };
 
   const handleDismiss = () => {
-    // Mark as submitted to prevent auto-showing again this session
-    sessionStorage.setItem('feedback-submitted', 'true');
-    setHasSubmitted(true);
-    handleClose();
+    // Mark as dismissed to prevent auto-showing again this session
+    sessionStorage.setItem('feedback-dismissed', 'true');
+    setIsVisible(false);
+    setShowMinimized(true);
   };
 
-  if (!isVisible || hasSubmitted) {
+  // Show minimized feedback button when not visible but user has interacted
+  if (!isVisible && showMinimized) {
+    return (
+      <div className="fixed bottom-4 right-4 z-50">
+        <Button
+          onClick={handleReopen}
+          className="rounded-full h-12 w-12 shadow-lg"
+          aria-label="Open feedback"
+        >
+          <MessageSquare className="h-5 w-5" />
+        </Button>
+      </div>
+    );
+  }
+
+  if (!isVisible) {
     return null;
   }
 
@@ -265,6 +296,10 @@ URL: ${feedbackMessage.url}`;
               Login required to send feedback
             </p>
           )}
+
+          <p className="text-xs text-muted-foreground text-center pt-2 border-t">
+            Feedback will be sent via encrypted DM to {recipientNpub.slice(0, 12)}...
+          </p>
         </CardContent>
       </Card>
     </div>
